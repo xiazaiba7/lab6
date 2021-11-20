@@ -1198,6 +1198,7 @@ int Stmt(int index)
 					num++;
 				}		
 				int judge_block=++blocknum;
+				fprintf(out,"          br label %%basic_block_%d\n",judge_block);
 				fprintf(out,"\n");
 				fprintf(out,"          basic_block_%d:\n",judge_block);
 				if(Cond(index)>0)
