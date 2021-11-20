@@ -4,6 +4,8 @@
 #include<stdlib.h>
 #include <sstream>
 #include <queue>
+#include <stack>
+#include <iostream>
 using namespace std;
 int length=0; 
 int num;
@@ -17,6 +19,8 @@ string constname;
 FILE *in,*out;
 string letter[100000];
 char op[20000];
+stack<int> judge_blocks;
+stack<int> out_blocks; 
 struct ident 
 {
 	string name;
@@ -440,6 +444,14 @@ int symbol(string s)
 	else if(strcmp(s.c_str(),"while")==0)
 	{
 		return 22;
+	}
+	else if(strcmp(s.c_str(),"continue")==0)
+	{
+		return 23;
+	}
+	else if(strcmp(s.c_str(),"break")==0)
+	{
+		return 24;
 	}
  	else
  	{
@@ -1204,6 +1216,7 @@ int Stmt(int index)
 					num++;
 				}		
 				int judge_block=++blocknum;
+				judge_blocks.push(judge_block);
 				fprintf(out,"          br label %%basic_block_%d\n",judge_block);
 				fprintf(out,"\n");
 				fprintf(out,"          basic_block_%d:\n",judge_block);
@@ -1222,6 +1235,7 @@ int Stmt(int index)
 						}
 						int in_block=++blocknum;
 						int out_block=++blocknum;
+						out_blocks.push(out_block);
 						if(shuzi[0].type==2)
 						{
 							fprintf(out,"          %%x%d = icmp ne i32 %s, 0\n",++numb,shuzi[0].name2.c_str());
@@ -1241,6 +1255,8 @@ int Stmt(int index)
 							fprintf(out,"          br label %%basic_block_%d\n",judge_block);
 							fprintf(out,"\n");
 							fprintf(out,"          basic_block_%d:\n",out_block);
+							judge_blocks.pop();
+							out_blocks.pop();
 							return 5;	
 						}
 						else
@@ -1257,6 +1273,40 @@ int Stmt(int index)
 				{
 					return 0;
 				}
+			}
+			else
+			{
+				return 0;
+			}
+		}
+		else if(a==23)
+		{
+			while(letter[num]=="block")
+			{
+				num++;
+			}
+			if(letter[num]==";")
+			{
+				num++;
+				fprintf(out,"          br label %%basic_block_%d\n",judge_blocks.top()); 
+				return 1;
+			}
+			else
+			{
+				return 0;
+			}
+		}
+		else if(a==24)
+		{
+			while(letter[num]=="block")
+			{
+				num++;
+			}
+			if(letter[num]==";")
+			{
+				num++;
+				fprintf(out,"          br label %%basic_block_%d\n",out_blocks.top()); 
+				return 1;
 			}
 			else
 			{
