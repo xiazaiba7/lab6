@@ -1243,6 +1243,13 @@ int Stmt(int index)
 							shuzi[0].name2=ch;
 							shuzi[0].type=3;
 						}
+						if(shuzi[0].type==0)
+						{
+							fprintf(out,"          %%x%d = icmp ne i32 %d, 0\n",++numb,shuzi[0].value);
+							sprintf(ch,"%%x%d",numb);
+							shuzi[0].name2=ch;
+							shuzi[0].type=3;
+						}
 						fprintf(out,"          br i1 %s ,label %%basic_block_%d, label %%basic_block_%d\n",shuzi[0].name2.c_str(),in_block,out_block);
 						fprintf(out,"\n");
 						fprintf(out,"          basic_block_%d:\n",in_block);
