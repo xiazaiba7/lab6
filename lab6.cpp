@@ -126,7 +126,10 @@ int operate(char c)
 	if(c=='/')
 	{
 		fprintf(out,"          %%x%d = sdiv i32 %s,%s\n",++numb,num2.c_str(),num1.c_str());
-		shuzi[top1-1].value=shuzi[top1-1].value/shuzi[top1].value;
+		if(shuzi[top1].value!=0)
+		{
+			shuzi[top1-1].value=shuzi[top1-1].value/shuzi[top1].value;
+		}
 		sprintf(ch,"%%x%d",numb);
 		shuzi[top1-1].name2=ch;
 		shuzi[top1-1].type=2;
@@ -135,7 +138,10 @@ int operate(char c)
 	if(c=='%')
 	{
 		fprintf(out,"          %%x%d = srem i32 %s,%s\n",++numb,num2.c_str(),num1.c_str());
-		shuzi[top1-1].value=shuzi[top1-1].value%shuzi[top1].value;
+		if(shuzi[top1].value!=0)
+		{
+			shuzi[top1-1].value=shuzi[top1-1].value%shuzi[top1].value;
+		}
 		sprintf(ch,"%%x%d",numb);
 		shuzi[top1-1].name2=ch;
 		shuzi[top1-1].type=2;
