@@ -812,6 +812,7 @@ int VarDecl(int index)
 		if(a==1)
 		{
 			numb++;
+			int address=numb;
 			//fprintf(out,"          %%x%d = alloca i32\n",numb);
 			//identstable[index].idents[++identstable[index].top].type=1;
 //			idents[++top3].type=1;
@@ -823,7 +824,7 @@ int VarDecl(int index)
 			int b =Vardef(index);
 			if(b>0)
 			{	
-				fprintf(out,"          %%x%d = alloca i32\n",numb);
+				fprintf(out,"          %%x%d = alloca i32\n",address);
 				identstable[index].idents[++identstable[index].top].type=1;
 				identstable[index].idents[identstable[index].top].name2=name2;
 				
