@@ -37,7 +37,7 @@ struct shuzu
 };
 struct identtable{
 	ident idents[100];
-	shuzu shuzu[100];
+	shuzu shuzus[100];
 	int top;
 	int top2;
 	int outnum;//上层符号表的编号 
