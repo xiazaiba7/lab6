@@ -812,17 +812,21 @@ int VarDecl(int index)
 		if(a==1)
 		{
 			numb++;
-			fprintf(out,"          %%x%d = alloca i32\n",numb);
-			identstable[index].idents[++identstable[index].top].type=1;
+			//fprintf(out,"          %%x%d = alloca i32\n",numb);
+			//identstable[index].idents[++identstable[index].top].type=1;
 //			idents[++top3].type=1;
 			string name2;
 			char ch[50];
 			sprintf(ch,"%%x%d",numb);
 			name2=ch;
-			identstable[index].idents[identstable[index].top].name2=name2;
+			//identstable[index].idents[identstable[index].top].name2=name2;
 			int b =Vardef(index);
 			if(b>0)
 			{	
+				fprintf(out,"          %%x%d = alloca i32\n",numb);
+				identstable[index].idents[++identstable[index].top].type=1;
+				identstable[index].idents[identstable[index].top].name2=name2;
+				
 				for(int i=1;i<=identstable[index].top;i++)//防止重复定义某一变量 
 				{
 					if(identstable[index].idents[i].name==varname)
