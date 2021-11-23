@@ -990,6 +990,7 @@ int Vardef(int index)
 		int a = judgeword(letter[num],num);
 		if(a==3)
 		{
+			int length=1;
 			varname=temp;
 			while(letter[num]=="block")
 			{
@@ -1012,6 +1013,7 @@ int Vardef(int index)
 					}
 					if(letter[num]=="]")
 					{
+						length=length*shuzi[0].value;
 						num++;
 					}
 					else
@@ -1644,6 +1646,24 @@ int Exp(int index)
 	int j=num;
 	if(AddExp(index)>0)
 	{
+		//新增 
+		if(index>0)
+		{
+			while(top2!=-1)
+			{
+				operate(op[top2]);
+				top2--;
+			}
+		}
+		else
+		{
+			while(top2!=-1)
+			{
+				operatewithnoprint(op[top2]);
+				top2--;
+			}
+		}
+		//新增 
 		return 1;
 	}
 	else
