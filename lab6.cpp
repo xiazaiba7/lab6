@@ -28,9 +28,18 @@ struct ident
 	int value;
 	int type; //1表示变量，0表示常量, 2表示变量的值（1是指针） 
 };
+struct shuzu
+{
+	string name;
+	string name2;
+	int length;
+	vector<int> value;
+};
 struct identtable{
 	ident idents[100];
+	shuzu shuzu[100];
 	int top;
+	int top2;
 	int outnum;//上层符号表的编号 
 };
 identtable identstable[100];
@@ -356,6 +365,8 @@ int EqExp(int index);
 int LAndExp(int index);
 int LOrExp(int index);
 int Cond(int index);
+int ConstInitVal(int index);
+int InitVal(int index);
 int symbol(string s)
 {
 	if(s=="(")
@@ -638,6 +649,51 @@ int ConstDef(int index)
 		if(a==3)
 		{
 			constname=temp;
+			while(letter[num]=="[")
+			{
+				num++;
+				while(letter[num]=="block")
+				{
+					num++;
+				}
+				if(Exp(index)>0)
+				{
+					if(index>0)
+					{
+						while(top2!=-1)
+						{
+							operate(op[top2]);
+							top2--;
+						}
+					}
+					else
+					{
+						while(top2!=-1)
+						{
+							operatewithnoprint(op[top2]);
+							top2--;
+						}
+					}
+					constdef=false;
+					return 1;
+				}
+				else
+				{
+					return 0;
+				}
+				while(letter[num]=="block")
+				{
+					num++;
+				}
+				if(letter[num]=="}")
+				{
+					num++;
+				}
+				while(letter[num]=="block")
+				{
+					num++;
+				}
+			}
 			if(letter[num]=="=")
 			{
 				num++;
@@ -646,7 +702,7 @@ int ConstDef(int index)
 					num++;
 				}
 				constdef=true;
-				if(Exp(index)>0)
+				if(ConstInitVal(index)>0)
 				{
 					if(index>0)
 					{
@@ -676,6 +732,7 @@ int ConstDef(int index)
 			{
 				return 0;
 			}
+			
 		}
 		else
 		{
@@ -688,6 +745,59 @@ int ConstDef(int index)
 		num=j;
 		return 0;
 	}
+}
+int ConstInitVal(int index)
+{
+	while(letter[num]=="block")
+	{
+		num++;
+	}
+	int a=num;
+	if(letter[num]=="{")
+	{
+		num++;
+		while(letter[num]=="block")
+		{
+			num++;
+		}
+		int b=num;
+		while(ConstInitVal(index)>0)
+		{
+			while(letter[num]=="block")
+			{	
+				num++;
+			}
+			if(letter[num]==",")
+			{
+				num++;	
+				while(letter[num]=="block")
+				{		
+					num++;
+				}
+			}
+			else
+			{
+				break;
+			}
+			b=num;
+		}
+		num=b;
+		while(letter[num]=="block")
+		{	
+			num++;
+		}
+		if(letter[num]=="}")
+		{
+			num++;
+			return 2;
+		}	
+	}
+	num=a;
+	if(Exp(index)>0)
+	{
+		return 1;
+	}
+	return 0;
 }
 int VarDecl(int index)
 {
@@ -808,6 +918,59 @@ int VarDecl(int index)
 		return 0;
 	}
 }
+int InitVal(int index)
+{
+	while(letter[num]=="block")
+	{
+		num++;
+	}
+	int a=num;
+	if(letter[num]=="{")
+	{
+		num++;
+		while(letter[num]=="block")
+		{
+			num++;
+		}
+
+		while(InitVal(index)>0)
+		{
+			while(letter[num]=="block")
+			{	
+				num++;
+			}
+			if(letter[num]==",")
+			{
+				num++;	
+				while(letter[num]=="block")
+				{		
+					num++;
+				}
+			}
+			else
+			{
+
+				break;
+			}
+		}
+
+		while(letter[num]=="block")
+		{	
+			num++;
+		}
+		if(letter[num]=="}")
+		{
+			num++;
+			return 2;
+		}	
+	}
+	num=a;
+	if(Exp(index)>0)
+	{
+		return 1;
+	}
+	return 0;
+}
 int Vardef(int index)
 {
 	top1=-1;
@@ -827,6 +990,40 @@ int Vardef(int index)
 			{
 				num++;
 			}
+			while(letter[num]=="[")
+			{
+				num++;
+				while(letter[num]=="block")
+				{
+					num++;
+				}
+				constdef==true;
+				if(Exp(index)>0)
+				{
+					constdef=false;
+					while(letter[num]=="block")
+					{
+						num++;
+					}
+					if(letter[num]=="]")
+					{
+						num++;
+					}
+					else
+					{
+						return 0;
+					}
+				}
+				else
+				{
+					return 0;
+				}
+				while(letter[num]=="block")
+				{
+					num++;
+				}
+				
+			}
 			if(letter[num]=="=")
 			{
 				num++;
@@ -834,7 +1031,7 @@ int Vardef(int index)
 				{
 					num++;
 				}
-				if(Exp(index)>0)
+				if(InitVal(index)>0)
 				{
 					while(top2!=-1)
 					{
@@ -1014,6 +1211,41 @@ int Stmt(int index)
 			int flag=0;
 			int biao=0;
 			int k;
+			while(letter[num]=="block")
+			{
+				num++;
+			}
+			while(letter[num]=="[")
+			{
+				num++;
+				while(letter[num]=="block")
+				{
+					num++;
+				}
+				if(Exp(index)>0)
+				{
+					while(letter[num]=="block")
+					{
+						num++;
+					}
+					if(letter[num]=="]")
+					{
+						num++;
+					}
+					else
+					{
+						return 0;
+					}
+				}
+				else
+				{
+					return 0;
+				}
+				while(letter[num]=="block")
+				{
+					num++;
+				}	
+			}
 			for(k=index;k>=0;k=identstable[k].outnum)
 			{ 
 				for(int i=0;i<=identstable[k].top;i++)
@@ -1624,6 +1856,41 @@ int PrimaryExp(int opt,int numfei,int index)
 		string s = letter[num];
 		if(judgeword(s,num)==3)
 		{
+			while(letter[num]=="block")
+			{
+				num++;
+			}
+			while(letter[num]=="[")
+			{
+				num++;
+				while(letter[num]=="block")
+				{
+					num++;
+				}
+				if(Exp(index)>0)
+				{
+					while(letter[num]=="block")
+					{
+						num++;
+					}
+					if(letter[num]=="]")
+					{
+						num++;
+					}
+					else
+					{
+						return 0;
+					}
+				}
+				else
+				{
+					return 0;
+				}
+				while(letter[num]=="block")
+				{
+					num++;
+				}	
+			}
 			int flag=0;
 			int top3=identstable[index].top;
 			for(int k=index;k>=0;k=identstable[k].outnum)
