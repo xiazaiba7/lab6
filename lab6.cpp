@@ -37,9 +37,8 @@ struct shuzu
 };
 struct identtable{
 	ident idents[100];
-	shuzu shuzus[100];
+	vector<shuzu> shuzus;
 	int top;
-	int top2;
 	int outnum;//上层符号表的编号 
 };
 identtable identstable[100];
@@ -656,6 +655,7 @@ int ConstDef(int index)
 				{
 					num++;
 				}
+				constdef=true;
 				if(Exp(index)>0)
 				{
 					if(index>0)
@@ -675,7 +675,6 @@ int ConstDef(int index)
 						}
 					}
 					constdef=false;
-					return 1;
 				}
 				else
 				{
@@ -685,7 +684,7 @@ int ConstDef(int index)
 				{
 					num++;
 				}
-				if(letter[num]=="}")
+				if(letter[num]=="]")
 				{
 					num++;
 				}
@@ -996,6 +995,18 @@ int Vardef(int index)
 			{
 				num++;
 			}
+			if(letter[num]=="[")
+			{
+				shuzu newshuzu;
+				newshuzu.name=varname;
+				numb++;
+				string name2;
+				char ch[50];
+				sprintf(ch,"%%x%d",numb);
+				newshuzu.name2=name2;
+				newshuzu.length=1;
+				identstable[index].shuzus.push_back(newshuzu);
+			} 
 			while(letter[num]=="[")
 			{
 				num++;
@@ -1006,6 +1017,22 @@ int Vardef(int index)
 				constdef==true;
 				if(Exp(index)>0)
 				{
+					if(index>0)
+					{
+						while(top2!=-1)
+						{
+							operate(op[top2]);
+							top2--;
+						}
+					}
+					else
+					{
+						while(top2!=-1)
+						{
+							operatewithnoprint(op[top2]);
+							top2--;
+						}
+					}
 					constdef=false;
 					while(letter[num]=="block")
 					{
@@ -1013,7 +1040,7 @@ int Vardef(int index)
 					}
 					if(letter[num]=="]")
 					{
-						length=length*shuzi[0].value;
+						identstable[index].shuzus.back().length*=shuzi[0].value;
 						num++;
 					}
 					else
@@ -1637,8 +1664,7 @@ int Number(string s,int n)
  return -1;
 }
 int Exp(int index)
-{
-	
+{	
 	while(letter[num]=="block")
 	{
 		num++;
@@ -1646,24 +1672,6 @@ int Exp(int index)
 	int j=num;
 	if(AddExp(index)>0)
 	{
-		//新增 
-		if(index>0)
-		{
-			while(top2!=-1)
-			{
-				operate(op[top2]);
-				top2--;
-			}
-		}
-		else
-		{
-			while(top2!=-1)
-			{
-				operatewithnoprint(op[top2]);
-				top2--;
-			}
-		}
-		//新增 
 		return 1;
 	}
 	else
