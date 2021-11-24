@@ -46,6 +46,7 @@ ident shuzi[2000];
 int top1=-1,top2=-1;
 string temp;
 int tempvalue;
+
 int operatewithnoprint(char c)
 {	
 	if(c=='+')
@@ -366,6 +367,7 @@ int LOrExp(int index);
 int Cond(int index);
 int ConstInitVal(int index);
 int InitVal(int index);
+int computeshuzi(int index);
 int symbol(string s)
 {
 	if(s=="(")
@@ -475,6 +477,26 @@ int symbol(string s)
  		return true;
 	return false; 
  }
+ int computeshuzi(int index)
+{
+	if(index>0)
+	{
+		while(top2!=-1)
+		{
+			operate(op[top2]);
+			top2--;
+		}
+	}
+	else
+	{
+		while(top2!=-1)
+		{
+			operatewithnoprint(op[top2]);
+			top2--;
+		}
+	}
+	return shuzi[0].value;
+}
  bool isoctaldigit(string s)
  {
  	if(s>="0"&&s<="7")
@@ -812,46 +834,9 @@ int VarDecl(int index)
 		{
 			numb++;
 			int address=numb;
-			//fprintf(out,"          %%x%d = alloca i32\n",numb);
-			//identstable[index].idents[++identstable[index].top].type=1;
-//			idents[++top3].type=1;
-//			string name2;
-//			char ch[50];
-//			sprintf(ch,"%%x%d",numb);
-//			name2=ch;
-			//identstable[index].idents[identstable[index].top].name2=name2;
 			int b =Vardef(index);
 			if(b>0)
 			{	
-//				fprintf(out,"          %%x%d = alloca i32\n",address);
-//				identstable[index].idents[++identstable[index].top].type=1;
-//				identstable[index].idents[identstable[index].top].name2=name2;
-				
-//				for(int i=1;i<=identstable[index].top;i++)//防止重复定义某一变量 
-//				{
-//					if(identstable[index].idents[i].name==varname)
-//						return 0;
-//				}
-//				identstable[index].idents[identstable[index].top].name=varname;
-//				identstable[index].idents[identstable[index].top].type=1;
-//				identstable[index].idents[identstable[index].top].value=0;
-//				if(b==2)
-//				{
-//					if(shuzi[0].type==0)
-//					{
-//						fprintf(out,"          store i32 %d, i32* %s\n",shuzi[0].value,identstable[index].idents[identstable[index].top].name2.c_str());
-//					}
-//					else if(shuzi[0].type==2)
-//					{
-//						fprintf(out,"          store i32 %s, i32* %s\n",shuzi[0].name2.c_str(),identstable[index].idents[identstable[index].top].name2.c_str());
-//					}
-//					else if(shuzi[0].type==1)
-//					{
-//						fprintf(out,"          %%x%d = load i32, i32* %s\n",++numb,shuzi[0].name2.c_str());
-//						fprintf(out,"          store i32 %%x%d, i32* %s\n",numb,identstable[index].idents[identstable[index].top].name2.c_str());
-//					}
-//					identstable[index].idents[identstable[index].top].value=shuzi[0].value;//这里可能要修改 
-//				}
 				while(letter[num]=="block")
 				{
 					num++;
@@ -859,41 +844,11 @@ int VarDecl(int index)
 				while(letter[num]==",")
 				{
 					num++;
-//					numb++;
-//					fprintf(out,"          %%x%d = alloca i32\n",numb);	
-//					identstable[index].idents[++identstable[index].top].type=1;
-//					sprintf(ch,"%%x%d",numb);
-//					name2=ch;
-//					identstable[index].idents[identstable[index].top].name2=name2;
 					int c = Vardef(index);
 					if(c<=0)
 					{
 						return 0;
 					}
-//					for(int i=1;i<=identstable[index].top;i++)
-//					{
-//						if(identstable[index].idents[i].name==varname)
-//							return 0;
-//					}
-//					identstable[index].idents[identstable[index].top].name=varname;
-//					identstable[index].idents[identstable[index].top].value=0;					
-//					if(c==2)
-//					{
-//						if(shuzi[0].type==0)
-//						{
-//							fprintf(out,"          store i32 %d, i32* %s\n",shuzi[0].value,identstable[index].idents[identstable[index].top].name2.c_str());
-//						}
-//						else if(shuzi[0].type==2)
-//						{
-//							fprintf(out,"          store i32 %s, i32* %s\n",shuzi[0].name2.c_str(),identstable[index].idents[identstable[index].top].name2.c_str());
-//						}
-//						else if(shuzi[0].type==1)
-//						{
-//							fprintf(out,"          %%x%d = load i32, i32* %s\n",++numb,shuzi[0].name2.c_str());
-//							fprintf(out,"          store i32 %%x%d, i32* %s\n",numb,identstable[index].idents[identstable[index].top].name2.c_str());
-//						}
-//						identstable[index].idents[identstable[index].top].value=shuzi[0].value;//这里可能要修改 
-//					}
 				}
 				while(letter[num]=="block")
 				{
@@ -989,6 +944,7 @@ int Vardef(int index)
 		int a = judgeword(letter[num],num);
 		if(a==3)
 		{
+			int type;
 			int length=1;
 			varname=temp;
 			while(letter[num]=="block")
@@ -997,6 +953,7 @@ int Vardef(int index)
 			}
 			if(letter[num]=="[")
 			{
+				type=2;
 				shuzu newshuzu;
 				newshuzu.name=varname;
 				numb++;
@@ -1009,6 +966,7 @@ int Vardef(int index)
 			}
 			else
 			{
+				type=1;
 				numb++;
 				string name2;
 				char ch[50];
@@ -1037,22 +995,7 @@ int Vardef(int index)
 				constdef==true;
 				if(Exp(index)>0)
 				{
-					if(index>0)
-					{
-						while(top2!=-1)
-						{
-							operate(op[top2]);
-							top2--;
-						}
-					}
-					else
-					{
-						while(top2!=-1)
-						{
-							operatewithnoprint(op[top2]);
-							top2--;
-						}
-					}
+					computeshuzi(index);
 					constdef=false;
 					while(letter[num]=="block")
 					{
@@ -1085,33 +1028,41 @@ int Vardef(int index)
 				{
 					num++;
 				}
-				if(InitVal(index)>0)
+				if(type==1)
 				{
-					while(top2!=-1)
+					if(InitVal(index)>0)
 					{
-						operate(op[top2]);
-						top2--;
+//						while(top2!=-1)
+//						{
+//							operate(op[top2]);
+//							top2--;
+//						}
+						computeshuzi(index);
+						if(shuzi[0].type==0)
+						{
+							fprintf(out,"          store i32 %d, i32* %s\n",shuzi[0].value,identstable[index].idents[identstable[index].top].name2.c_str());
+						}
+						else if(shuzi[0].type==2)
+						{
+							fprintf(out,"          store i32 %s, i32* %s\n",shuzi[0].name2.c_str(),identstable[index].idents[identstable[index].top].name2.c_str());
+						}
+						else if(shuzi[0].type==1)
+						{
+							fprintf(out,"          %%x%d = load i32, i32* %s\n",++numb,shuzi[0].name2.c_str());
+							fprintf(out,"          store i32 %%x%d, i32* %s\n",numb,identstable[index].idents[identstable[index].top].name2.c_str());
+						}
+						identstable[index].idents[identstable[index].top].value=shuzi[0].value;//这里可能要修改 
+						return 2;
+						
 					}
-					if(shuzi[0].type==0)
+					else
 					{
-						fprintf(out,"          store i32 %d, i32* %s\n",shuzi[0].value,identstable[index].idents[identstable[index].top].name2.c_str());
+						return 0;
 					}
-					else if(shuzi[0].type==2)
-					{
-						fprintf(out,"          store i32 %s, i32* %s\n",shuzi[0].name2.c_str(),identstable[index].idents[identstable[index].top].name2.c_str());
-					}
-					else if(shuzi[0].type==1)
-					{
-						fprintf(out,"          %%x%d = load i32, i32* %s\n",++numb,shuzi[0].name2.c_str());
-						fprintf(out,"          store i32 %%x%d, i32* %s\n",numb,identstable[index].idents[identstable[index].top].name2.c_str());
-					}
-					identstable[index].idents[identstable[index].top].value=shuzi[0].value;//这里可能要修改 
-					return 2;
-					
 				}
-				else
+				else if(type==2)
 				{
-					return 0;
+					
 				}
 			}
 			else
