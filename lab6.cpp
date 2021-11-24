@@ -815,17 +815,17 @@ int VarDecl(int index)
 			//fprintf(out,"          %%x%d = alloca i32\n",numb);
 			//identstable[index].idents[++identstable[index].top].type=1;
 //			idents[++top3].type=1;
-			string name2;
-			char ch[50];
-			sprintf(ch,"%%x%d",numb);
-			name2=ch;
+//			string name2;
+//			char ch[50];
+//			sprintf(ch,"%%x%d",numb);
+//			name2=ch;
 			//identstable[index].idents[identstable[index].top].name2=name2;
 			int b =Vardef(index);
 			if(b>0)
 			{	
-				fprintf(out,"          %%x%d = alloca i32\n",address);
-				identstable[index].idents[++identstable[index].top].type=1;
-				identstable[index].idents[identstable[index].top].name2=name2;
+//				fprintf(out,"          %%x%d = alloca i32\n",address);
+//				identstable[index].idents[++identstable[index].top].type=1;
+//				identstable[index].idents[identstable[index].top].name2=name2;
 				
 				for(int i=1;i<=identstable[index].top;i++)//防止重复定义某一变量 
 				{
@@ -859,12 +859,12 @@ int VarDecl(int index)
 				while(letter[num]==",")
 				{
 					num++;
-					numb++;
-					fprintf(out,"          %%x%d = alloca i32\n",numb);	
-					identstable[index].idents[++identstable[index].top].type=1;
-					sprintf(ch,"%%x%d",numb);
-					name2=ch;
-					identstable[index].idents[identstable[index].top].name2=name2;
+//					numb++;
+//					fprintf(out,"          %%x%d = alloca i32\n",numb);	
+//					identstable[index].idents[++identstable[index].top].type=1;
+//					sprintf(ch,"%%x%d",numb);
+//					name2=ch;
+//					identstable[index].idents[identstable[index].top].name2=name2;
 					int c = Vardef(index);
 					if(c<=0)
 					{
@@ -1006,7 +1006,19 @@ int Vardef(int index)
 				newshuzu.name2=name2;
 				newshuzu.length=1;
 				identstable[index].shuzus.push_back(newshuzu);
-			} 
+			}
+			else
+			{
+				numb++;
+				string name2;
+				char ch[50];
+				sprintf(ch,"%%x%d",numb);
+				name2=ch;
+				int address=numb;
+				fprintf(out,"          %%x%d = alloca i32\n",address);
+				identstable[index].idents[++identstable[index].top].type=1;
+				identstable[index].idents[identstable[index].top].name2=name2;
+			}
 			while(letter[num]=="[")
 			{
 				num++;
