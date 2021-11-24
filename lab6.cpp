@@ -827,31 +827,31 @@ int VarDecl(int index)
 //				identstable[index].idents[++identstable[index].top].type=1;
 //				identstable[index].idents[identstable[index].top].name2=name2;
 				
-				for(int i=1;i<=identstable[index].top;i++)//防止重复定义某一变量 
-				{
-					if(identstable[index].idents[i].name==varname)
-						return 0;
-				}
-				identstable[index].idents[identstable[index].top].name=varname;
-				identstable[index].idents[identstable[index].top].type=1;
-				identstable[index].idents[identstable[index].top].value=0;
-				if(b==2)
-				{
-					if(shuzi[0].type==0)
-					{
-						fprintf(out,"          store i32 %d, i32* %s\n",shuzi[0].value,identstable[index].idents[identstable[index].top].name2.c_str());
-					}
-					else if(shuzi[0].type==2)
-					{
-						fprintf(out,"          store i32 %s, i32* %s\n",shuzi[0].name2.c_str(),identstable[index].idents[identstable[index].top].name2.c_str());
-					}
-					else if(shuzi[0].type==1)
-					{
-						fprintf(out,"          %%x%d = load i32, i32* %s\n",++numb,shuzi[0].name2.c_str());
-						fprintf(out,"          store i32 %%x%d, i32* %s\n",numb,identstable[index].idents[identstable[index].top].name2.c_str());
-					}
-					identstable[index].idents[identstable[index].top].value=shuzi[0].value;//这里可能要修改 
-				}
+//				for(int i=1;i<=identstable[index].top;i++)//防止重复定义某一变量 
+//				{
+//					if(identstable[index].idents[i].name==varname)
+//						return 0;
+//				}
+//				identstable[index].idents[identstable[index].top].name=varname;
+//				identstable[index].idents[identstable[index].top].type=1;
+//				identstable[index].idents[identstable[index].top].value=0;
+//				if(b==2)
+//				{
+//					if(shuzi[0].type==0)
+//					{
+//						fprintf(out,"          store i32 %d, i32* %s\n",shuzi[0].value,identstable[index].idents[identstable[index].top].name2.c_str());
+//					}
+//					else if(shuzi[0].type==2)
+//					{
+//						fprintf(out,"          store i32 %s, i32* %s\n",shuzi[0].name2.c_str(),identstable[index].idents[identstable[index].top].name2.c_str());
+//					}
+//					else if(shuzi[0].type==1)
+//					{
+//						fprintf(out,"          %%x%d = load i32, i32* %s\n",++numb,shuzi[0].name2.c_str());
+//						fprintf(out,"          store i32 %%x%d, i32* %s\n",numb,identstable[index].idents[identstable[index].top].name2.c_str());
+//					}
+//					identstable[index].idents[identstable[index].top].value=shuzi[0].value;//这里可能要修改 
+//				}
 				while(letter[num]=="block")
 				{
 					num++;
@@ -870,30 +870,30 @@ int VarDecl(int index)
 					{
 						return 0;
 					}
-					for(int i=1;i<=identstable[index].top;i++)
-					{
-						if(identstable[index].idents[i].name==varname)
-							return 0;
-					}
-					identstable[index].idents[identstable[index].top].name=varname;
-					identstable[index].idents[identstable[index].top].value=0;					
-					if(c==2)
-					{
-						if(shuzi[0].type==0)
-						{
-							fprintf(out,"          store i32 %d, i32* %s\n",shuzi[0].value,identstable[index].idents[identstable[index].top].name2.c_str());
-						}
-						else if(shuzi[0].type==2)
-						{
-							fprintf(out,"          store i32 %s, i32* %s\n",shuzi[0].name2.c_str(),identstable[index].idents[identstable[index].top].name2.c_str());
-						}
-						else if(shuzi[0].type==1)
-						{
-							fprintf(out,"          %%x%d = load i32, i32* %s\n",++numb,shuzi[0].name2.c_str());
-							fprintf(out,"          store i32 %%x%d, i32* %s\n",numb,identstable[index].idents[identstable[index].top].name2.c_str());
-						}
-						identstable[index].idents[identstable[index].top].value=shuzi[0].value;//这里可能要修改 
-					}
+//					for(int i=1;i<=identstable[index].top;i++)
+//					{
+//						if(identstable[index].idents[i].name==varname)
+//							return 0;
+//					}
+//					identstable[index].idents[identstable[index].top].name=varname;
+//					identstable[index].idents[identstable[index].top].value=0;					
+//					if(c==2)
+//					{
+//						if(shuzi[0].type==0)
+//						{
+//							fprintf(out,"          store i32 %d, i32* %s\n",shuzi[0].value,identstable[index].idents[identstable[index].top].name2.c_str());
+//						}
+//						else if(shuzi[0].type==2)
+//						{
+//							fprintf(out,"          store i32 %s, i32* %s\n",shuzi[0].name2.c_str(),identstable[index].idents[identstable[index].top].name2.c_str());
+//						}
+//						else if(shuzi[0].type==1)
+//						{
+//							fprintf(out,"          %%x%d = load i32, i32* %s\n",++numb,shuzi[0].name2.c_str());
+//							fprintf(out,"          store i32 %%x%d, i32* %s\n",numb,identstable[index].idents[identstable[index].top].name2.c_str());
+//						}
+//						identstable[index].idents[identstable[index].top].value=shuzi[0].value;//这里可能要修改 
+//					}
 				}
 				while(letter[num]=="block")
 				{
@@ -1018,6 +1018,14 @@ int Vardef(int index)
 				fprintf(out,"          %%x%d = alloca i32\n",address);
 				identstable[index].idents[++identstable[index].top].type=1;
 				identstable[index].idents[identstable[index].top].name2=name2;
+				for(int i=1;i<=identstable[index].top;i++)//防止重复定义某一变量 
+				{
+					if(identstable[index].idents[i].name==varname)
+						return 0;
+				}
+				identstable[index].idents[identstable[index].top].name=varname;
+				identstable[index].idents[identstable[index].top].type=1;
+				identstable[index].idents[identstable[index].top].value=0;
 			}
 			while(letter[num]=="[")
 			{
@@ -1084,7 +1092,22 @@ int Vardef(int index)
 						operate(op[top2]);
 						top2--;
 					}
+					if(shuzi[0].type==0)
+					{
+						fprintf(out,"          store i32 %d, i32* %s\n",shuzi[0].value,identstable[index].idents[identstable[index].top].name2.c_str());
+					}
+					else if(shuzi[0].type==2)
+					{
+						fprintf(out,"          store i32 %s, i32* %s\n",shuzi[0].name2.c_str(),identstable[index].idents[identstable[index].top].name2.c_str());
+					}
+					else if(shuzi[0].type==1)
+					{
+						fprintf(out,"          %%x%d = load i32, i32* %s\n",++numb,shuzi[0].name2.c_str());
+						fprintf(out,"          store i32 %%x%d, i32* %s\n",numb,identstable[index].idents[identstable[index].top].name2.c_str());
+					}
+					identstable[index].idents[identstable[index].top].value=shuzi[0].value;//这里可能要修改 
 					return 2;
+					
 				}
 				else
 				{
